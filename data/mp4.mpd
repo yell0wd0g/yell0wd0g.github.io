@@ -3,13 +3,13 @@
   <Period>
     <AdaptationSet id="0">
       <Representation id="0" bandwidth="109148" codecs="avc1.42c00c" mimeType="video/mp4" width="256" height="144">
-        <BaseURL>//crosvideo.commondatastorage.googleapis.com/144.mp4</BaseURL>
+        <BaseURL>//yellowdoge.github.io/data/144.mp4</BaseURL>
         <SegmentBase indexRange="671-1194" timescale="90000">
           <Initialization range="0-670"/>
         </SegmentBase>
       </Representation>
       <Representation id="1" bandwidth="244290" codecs="avc1.4d4015" mimeType="video/mp4" width="426" height="240">
-        <BaseURL>//crosvideo.commondatastorage.googleapis.com/240.mp4</BaseURL>
+        <BaseURL>//yellowdoge.github.io/data/240.mp4</BaseURL>
         <SegmentBase indexRange="673-1196" timescale="90000">
           <Initialization range="0-672"/>
         </SegmentBase>
