@@ -14,51 +14,6 @@
           <Initialization range="0-672"/>
         </SegmentBase>
       </Representation>
-      <Representation id="2" bandwidth="290571" codecs="avc1.4d401e" mimeType="video/mp4" width="640" height="360">
-        <BaseURL>//crosvideo.commondatastorage.googleapis.com/360.mp4</BaseURL>
-        <SegmentBase indexRange="673-1196" timescale="90000">
-          <Initialization range="0-672"/>
-        </SegmentBase>
-      </Representation>
-      <Representation id="3" bandwidth="626981" codecs="avc1.4d401f" mimeType="video/mp4" width="854" height="480">
-        <BaseURL>//crosvideo.commondatastorage.googleapis.com/480.mp4</BaseURL>
-        <SegmentBase indexRange="673-1196" timescale="90000">
-          <Initialization range="0-672"/>
-        </SegmentBase>
-      </Representation>
-      <Representation id="4" bandwidth="1264735" codecs="avc1.4d401f" mimeType="video/mp4" width="1280" height="720">
-        <BaseURL>//crosvideo.commondatastorage.googleapis.com/720.mp4</BaseURL>
-        <SegmentBase indexRange="673-1196" timescale="90000">
-          <Initialization range="0-672"/>
-        </SegmentBase>
-      </Representation>
-      <Representation id="5" bandwidth="2424128" codecs="avc1.640028" mimeType="video/mp4" width="1920" height="1080">
-        <BaseURL>//crosvideo.commondatastorage.googleapis.com/1080.mp4</BaseURL>
-        <SegmentBase indexRange="675-1198" timescale="90000">
-          <Initialization range="0-674"/>
-        </SegmentBase>
-      </Representation>
-      <Representation id="6" bandwidth="5636334" codecs="avc1.640032" mimeType="video/mp4" width="2560" height="1440">
-        <BaseURL>//crosvideo.commondatastorage.googleapis.com/1440.mp4</BaseURL>
-        <SegmentBase indexRange="674-1197" timescale="90000">
-          <Initialization range="0-673"/>
-        </SegmentBase>
-      </Representation>
-      <Representation id="7" bandwidth="13435740" codecs="avc1.640033" mimeType="video/mp4" width="3840" height="2160">
-        <BaseURL>//crosvideo.commondatastorage.googleapis.com/2160.mp4</BaseURL>
-        <SegmentBase indexRange="675-1198" timescale="90000">
-          <Initialization range="0-674"/>
-        </SegmentBase>
-      </Representation>
-    </AdaptationSet>
-    <AdaptationSet id="1">
-      <Representation id="8" bandwidth="127152" codecs="mp4a.40.2" mimeType="audio/mp4" audioSamplingRate="44100">
-        <AudioChannelConfiguration schemeIdUri="urn:mpeg:dash:23003:3:audio_channel_configuration:2011" value="2"/>
-        <BaseURL>//crosvideo.commondatastorage.googleapis.com/audio_med.mp4</BaseURL>
-        <SegmentBase indexRange="608-1155" timescale="44100">
-          <Initialization range="0-607"/>
-        </SegmentBase>
-      </Representation>
     </AdaptationSet>
   </Period>
 </MPD>
