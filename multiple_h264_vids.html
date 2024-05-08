@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>N video grid H.264 (1280x572)</title>
+    <style>
+      .grid-container {
+	  display: grid;
+	  grid-template-columns: repeat(3, 1fr);
+      }
+
+      .controls {
+	  max-width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <script>
+      const params = new Proxy(new URLSearchParams(window.location.search), {
+	  get: (searchParams, prop) => searchParams.get(prop),
+      });
+      // Get the value of "num" in eg "https://bla.com/?num=some_value"
+      let numVideosParam = Number(params.num); // "some_value"
+      
+      var containerDiv = document.createElement('div');
+      containerDiv.className = 'grid-container';
+      document.getElementsByTagName('body')[0].appendChild(containerDiv);
+
+      let numVideos = (numVideosParam != 0) ? numVideosParam : 10;
+      for (let i = 0; i < numVideos; i++) {
+	  var itemDiv = document.createElement('div');
+	  itemDiv.className = 'grid-item';
+	  containerDiv.appendChild(itemDiv);
+
+	  var videoElement = document.createElement('video');
+	  videoElement.className = 'controls';
+	  videoElement.autoplay = true;
+	  videoElement.muted = true;
+	  videoElement.loop = true;
+	  videoElement.src = "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4";
+	  itemDiv.appendChild(videoElement);
+      }
+    </script>
+
+  </body>
+</html>
