@@ -12,7 +12,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 { id: '2', title: 'Sintel', thumbnailUrl: 'https://via.placeholder.com/280x150.png?text=Sintel', videoUrl: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4' },
                 { id: '3', title: 'Tears of Steel', thumbnailUrl: 'https://via.placeholder.com/280x150.png?text=Tears+of+Steel', videoUrl: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4' },
                 { id: '4', title: 'Elephants Dream', thumbnailUrl: 'https://via.placeholder.com/280x150.png?text=Elephants+Dream', videoUrl: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4' },
-                { id: '5', title: 'Cosmos Laundromat - First Cycle', thumbnailUrl: 'https://via.placeholder.com/280x150.png?text=Cosmos+Laundromat', videoUrl: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/CosmosLaundromat.mp4'}
+                { id: '5', title: 'Cosmos Laundromat - First Cycle', thumbnailUrl: 'https://via.placeholder.com/280x150.png?text=Cosmos+Laundromat', videoUrl: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/CosmosLaundromat.mp4'},
+                { id: '1', title: 'Big Buck Bunny', thumbnailUrl: 'https://via.placeholder.com/280x150.png?text=Big+Buck+Bunny', videoUrl: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4' },
+                { id: '2', title: 'Sintel', thumbnailUrl: 'https://via.placeholder.com/280x150.png?text=Sintel', videoUrl: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4' }
             ]
         },
         {
@@ -21,7 +23,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 { id: '6', title: 'Spring', thumbnailUrl: 'https://via.placeholder.com/280x150.png?text=Spring', videoUrl: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4' },
                 { id: '7', title: 'Coffee Run', thumbnailUrl: 'https://via.placeholder.com/280x150.png?text=Coffee+Run', videoUrl: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4' },
                 { id: '8', title: 'Agent 327: Operation Barbershop', thumbnailUrl: 'https://via.placeholder.com/280x150.png?text=Agent+327', videoUrl: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4' },
-                { id: '9', title: 'Caminandes: Llamigos', thumbnailUrl: 'https://via.placeholder.com/280x150.png?text=Caminandes', videoUrl: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4' }
+                { id: '9', title: 'Caminandes: Llamigos', thumbnailUrl: 'https://via.placeholder.com/280x150.png?text=Caminandes', videoUrl: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4' },
+                { id: '6', title: 'Spring', thumbnailUrl: 'https://via.placeholder.com/280x150.png?text=Spring', videoUrl: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4' },
+                { id: '7', title: 'Coffee Run', thumbnailUrl: 'https://via.placeholder.com/280x150.png?text=Coffee+Run', videoUrl: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4' }
             ]
         }
     ];
