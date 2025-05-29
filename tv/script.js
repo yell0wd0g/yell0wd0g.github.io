@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
     const mainContentArea = document.getElementById('content');
-    let originalCarouselsHTML = ''; // To store the initial state of carousels
+    // let originalCarouselsHTML = ''; // To store the initial state of carousels - Not effectively used with current renderCarousels
 
     // Data for video carousels
     // Sourced from: https://www.blender.org/about/projects/
@@ -31,10 +31,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const videoPlayerContainer = document.createElement('div');
         videoPlayerContainer.style.padding = '20px'; // Add some padding around the video
+        // videoPlayerContainer.classList.add('video-player-container'); // Optional: for CSS styling
 
         const videoTitleElement = document.createElement('h2');
         videoTitleElement.textContent = videoTitle;
         videoTitleElement.style.marginBottom = '15px';
+        // videoTitleElement.classList.add('video-title-player'); // Optional: for CSS styling
         videoPlayerContainer.appendChild(videoTitleElement);
 
         const videoElement = document.createElement('video');
@@ -44,14 +46,16 @@ document.addEventListener('DOMContentLoaded', function() {
         videoElement.style.width = '100%';
         videoElement.style.height = 'auto';
         videoElement.style.maxHeight = 'calc(100vh - 150px)'; // Ensure video fits viewport reasonably
+        // videoElement.style.borderRadius = '4px'; // Optional
         videoPlayerContainer.appendChild(videoElement);
 
         const backButton = document.createElement('button');
         backButton.textContent = '← Back to Home';
+        // backButton.classList.add('back-button'); // Optional: for CSS styling (remove inline styles below if used)
         backButton.style.marginTop = '20px';
         backButton.style.padding = '10px 20px';
         backButton.style.fontSize = '16px';
-        backButton.style.backgroundColor = '#555';
+        backButton.style.backgroundColor = '#555'; // Default, can be overridden by CSS if class is used
         backButton.style.color = '#fff';
         backButton.style.border = 'none';
         backButton.style.borderRadius = '4px';
@@ -81,8 +85,7 @@ document.addEventListener('DOMContentLoaded', function() {
             thumbnailDiv.setAttribute('data-video-url', video.videoUrl);
             thumbnailDiv.setAttribute('data-video-title', video.title);
 
-
-            const imgElement = document.createElement('img');
+            const imgElement = document.createElement('img'); 
             imgElement.src = video.thumbnailUrl;
             imgElement.alt = video.title;
 
@@ -92,13 +95,74 @@ document.addEventListener('DOMContentLoaded', function() {
 
             thumbnailDiv.appendChild(imgElement);
             thumbnailDiv.appendChild(thumbnailTitle);
-            thumbnailContainer.appendChild(thumbnailDiv);
+            
+            // --- START OF HOVER PREVIEW LOGIC ---
+            let previewTimer = null;
+
+            thumbnailDiv.addEventListener('mouseenter', () => {
+                if (previewTimer) clearTimeout(previewTimer); // Clear existing timer
+
+                previewTimer = setTimeout(() => {
+                    const staticImg = thumbnailDiv.querySelector('img');
+                    if (staticImg) {
+                        staticImg.style.display = 'none';
+                    }
+
+                    const oldPreviewVideo = thumbnailDiv.querySelector('.thumbnail-video-preview');
+                    if (oldPreviewVideo) {
+                        oldPreviewVideo.remove();
+                    }
+
+                    const previewVideo = document.createElement('video');
+                    previewVideo.src = video.videoUrl; 
+                    previewVideo.autoplay = true;
+                    previewVideo.loop = true;
+                    previewVideo.muted = true; // Important for autoplay without user interaction
+                    previewVideo.classList.add('thumbnail-video-preview');
+                    previewVideo.style.display = 'block'; 
+
+                    thumbnailDiv.insertBefore(previewVideo, thumbnailTitle); 
+                }, 2000); 
+            });
+
+            thumbnailDiv.addEventListener('mouseleave', () => {
+                if (previewTimer) {
+                    clearTimeout(previewTimer);
+                    previewTimer = null;
+                }
+
+                const previewVideo = thumbnailDiv.querySelector('.thumbnail-video-preview');
+                if (previewVideo) {
+                    previewVideo.remove();
+                }
+
+                const staticImg = thumbnailDiv.querySelector('img');
+                if (staticImg) {
+                    staticImg.style.display = 'block';
+                }
+            });
+            // --- END OF HOVER PREVIEW LOGIC ---
 
             thumbnailDiv.addEventListener('click', function() {
+                if (previewTimer) { // Clear hover preview timer if active
+                    clearTimeout(previewTimer);
+                    previewTimer = null;
+                }
+                const existingPreview = this.querySelector('.thumbnail-video-preview');
+                if (existingPreview) { // Remove preview video if playing
+                    existingPreview.remove();
+                }
+                const staticImg = this.querySelector('img');
+                if (staticImg) { // Ensure static image is visible before full playback
+                    staticImg.style.display = 'block';
+                }
+
                 const videoUrl = this.getAttribute('data-video-url');
                 const videoTitle = this.getAttribute('data-video-title');
-                playVideo(videoUrl, videoTitle);
+                playVideo(videoUrl, videoTitle); 
             });
+
+            thumbnailContainer.appendChild(thumbnailDiv);
         });
 
         carouselDiv.appendChild(thumbnailContainer);
@@ -106,16 +170,11 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function renderCarousels() {
-        mainContentArea.innerHTML = ''; // Clear current content (e.g., video player)
-        // For this version, let's always re-render to ensure listeners are attached.
+        mainContentArea.innerHTML = ''; 
         carouselsData.forEach(carouselContent => {
             const carouselElement = createCarousel(carouselContent);
             mainContentArea.appendChild(carouselElement);
         });
-        // Optionally, store the generated HTML to restore it faster next time
-        // if (!originalCarouselsHTML) {
-        // originalCarouselsHTML = mainContentArea.innerHTML; // This approach has issues with event listeners
-        // }
     }
 
     // Initial rendering of carousels
