@@ -1,0 +1,92 @@
+body {
+    background-color: #141414; /* Dark background */
+    color: #fff; /* Light text */
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 50px; /* Add some padding */
+    background-color: #1c1c1c; /* Slightly lighter than body for contrast */
+    border-bottom: 1px solid #333; /* Subtle border */
+}
+
+.logo img {
+    height: 40px; /* Adjust as needed */
+    width: auto;
+}
+
+.user-profile img {
+    height: 40px; /* Adjust as needed */
+    width: 40px;
+    border-radius: 50%; /* Make it circular */
+}
+
+#content {
+    padding: 20px 50px;
+}
+
+.carousel {
+    margin-bottom: 30px;
+}
+
+.carousel-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.thumbnail-container {
+    display: flex; /* Arrange thumbnails in a row */
+    overflow-x: auto; /* Allow horizontal scrolling */
+    gap: 15px; /* Space between thumbnails */
+}
+
+.thumbnail {
+    background-color: #222; /* Thumbnail background */
+    border-radius: 4px;
+    overflow: hidden;
+    cursor: pointer;
+    width: 280px; /* Fixed width for thumbnails */
+    flex-shrink: 0; /* Prevent thumbnails from shrinking */
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out; /* Added transition */
+}
+
+.thumbnail:hover {
+    transform: scale(1.05); /* Zoom effect on hover */
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.2); /* Subtle glow */
+}
+
+.thumbnail img {
+    width: 100%;
+    height: auto; /* Changed from fixed 150px to auto for aspect ratio */
+    aspect-ratio: 16 / 9; /* Maintain a 16:9 aspect ratio for thumbnails */
+    object-fit: cover; /* Ensure the image covers the area, cropping if necessary */
+    display: block;
+}
+
+.thumbnail-title {
+    padding: 10px;
+    font-size: 16px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; /* Add ellipsis for long titles */
+}
+
+/* Basic scrollbar styling (optional, for a cleaner look) */
+.thumbnail-container::-webkit-scrollbar {
+    height: 8px;
+}
+
+.thumbnail-container::-webkit-scrollbar-thumb {
+    background: #555;
+    border-radius: 4px;
+}
+
+.thumbnail-container::-webkit-scrollbar-track {
+    background: #333;
+}
