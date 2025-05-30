@@ -89,45 +89,7 @@ document.addEventListener('DOMContentLoaded', function() {
             thumbnailTitle.textContent = video.title;
             thumbnailDiv.appendChild(thumbnailTitle); // Then append title
             
-            thumbnailDiv.previewTimer = null;
-
-            thumbnailDiv.addEventListener('mouseenter', function() {
-                if (this.previewTimer) clearTimeout(this.previewTimer);
-                const currentThumbnailDiv = this;
-                this.previewTimer = setTimeout(() => {
-                    const staticDisplay = currentThumbnailDiv.querySelector('.thumbnail-letter-display'); // Changed
-                    if (staticDisplay) staticDisplay.style.display = 'none';
-
-                    const oldPreviewVideo = currentThumbnailDiv.querySelector('.thumbnail-video-preview');
-                    if (oldPreviewVideo) oldPreviewVideo.remove();
-
-                    const previewVideo = document.createElement('video');
-                    previewVideo.src = video.videoUrl;
-                    previewVideo.autoplay = true;
-                    previewVideo.loop = true;
-                    previewVideo.muted = true;
-                    previewVideo.classList.add('thumbnail-video-preview');
-                    previewVideo.style.display = 'block';
-                    currentThumbnailDiv.insertBefore(previewVideo, thumbnailTitle); 
-                }, 2000);
-            });
-
-            thumbnailDiv.addEventListener('mouseleave', function() {
-                if (this.previewTimer) {
-                    clearTimeout(this.previewTimer);
-                    this.previewTimer = null;
-                }
-                const previewVideo = this.querySelector('.thumbnail-video-preview');
-                if (previewVideo) previewVideo.remove();
-                const staticDisplay = this.querySelector('.thumbnail-letter-display'); // Changed
-                if (staticDisplay) staticDisplay.style.display = 'block';
-            });
-
             thumbnailDiv.addEventListener('click', function() {
-                if (this.previewTimer) {
-                    clearTimeout(this.previewTimer);
-                    this.previewTimer = null;
-                }
                 const existingPreview = this.querySelector('.thumbnail-video-preview');
                 if (existingPreview) existingPreview.remove();
                 const staticDisplay = this.querySelector('.thumbnail-letter-display'); // Changed
@@ -154,10 +116,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 } else if (event.key === 'Enter' || event.key === ' ') {
                     event.preventDefault();
-                    if (this.previewTimer) {
-                        clearTimeout(this.previewTimer);
-                        this.previewTimer = null;
-                    }
                     const existingPreview = this.querySelector('.thumbnail-video-preview');
                     if (existingPreview) existingPreview.remove();
                     const staticDisplay = this.querySelector('.thumbnail-letter-display'); // Changed
@@ -174,6 +132,49 @@ document.addEventListener('DOMContentLoaded', function() {
                     targetThumbnail.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
                 }
             });
+
+            // Autoplay preview on keyboard focus
+            thumbnailDiv.focusPreviewTimer = null;
+            thumbnailDiv.addEventListener('focusin', function() {
+                // Clear any existing timer
+                if (this.focusPreviewTimer) {
+                    clearTimeout(this.focusPreviewTimer);
+                }
+                const currentThumbnailDiv = this;
+                this.focusPreviewTimer = setTimeout(() => {
+                    if (document.activeElement === currentThumbnailDiv) {
+                        const staticDisplay = currentThumbnailDiv.querySelector('.thumbnail-letter-display');
+                        if (staticDisplay) staticDisplay.style.display = 'none';
+
+                        const oldPreviewVideo = currentThumbnailDiv.querySelector('.thumbnail-video-preview');
+                        if (oldPreviewVideo) oldPreviewVideo.remove();
+
+                        const previewVideo = document.createElement('video');
+                        previewVideo.src = currentThumbnailDiv.getAttribute('data-video-url');
+                        previewVideo.autoplay = true;
+                        previewVideo.loop = true;
+                        previewVideo.muted = true;
+                        previewVideo.classList.add('thumbnail-video-preview');
+                        previewVideo.style.display = 'block';
+                        
+                        const thumbnailTitle = currentThumbnailDiv.querySelector('.thumbnail-title');
+                        currentThumbnailDiv.insertBefore(previewVideo, thumbnailTitle);
+                    }
+                }, 2000);
+            });
+
+            thumbnailDiv.addEventListener('focusout', function() {
+                if (this.focusPreviewTimer) {
+                    clearTimeout(this.focusPreviewTimer);
+                    this.focusPreviewTimer = null;
+                }
+                const previewVideo = this.querySelector('.thumbnail-video-preview');
+                if (previewVideo) previewVideo.remove();
+
+                const staticDisplay = this.querySelector('.thumbnail-letter-display');
+                if (staticDisplay) staticDisplay.style.display = 'flex'; // Restore display
+            });
+
             thumbnailContainer.appendChild(thumbnailDiv);
         });
         carouselDiv.appendChild(thumbnailContainer);
@@ -187,5 +188,62 @@ document.addEventListener('DOMContentLoaded', function() {
             mainContentArea.appendChild(carouselElement);
         });
     }
+
+    function findClosestThumbnail(targetCarousel, currentThumbnailOffsetLeft) {
+        const thumbnails = targetCarousel.querySelectorAll('.thumbnail');
+        if (!thumbnails.length) return null;
+
+        let closestThumbnail = thumbnails[0];
+        let minDiff = Math.abs(thumbnails[0].offsetLeft - currentThumbnailOffsetLeft);
+
+        for (let i = 1; i < thumbnails.length; i++) {
+            const diff = Math.abs(thumbnails[i].offsetLeft - currentThumbnailOffsetLeft);
+            if (diff < minDiff) {
+                minDiff = diff;
+                closestThumbnail = thumbnails[i];
+            }
+        }
+        return closestThumbnail;
+    }
+
+    document.addEventListener('keydown', function(event) {
+        const activeElement = document.activeElement;
+
+        if (!activeElement || !activeElement.classList.contains('thumbnail')) {
+            return; // Do nothing if a thumbnail is not focused
+        }
+
+        let targetCarousel = null;
+        const currentThumbnail = activeElement;
+        const currentCarousel = currentThumbnail.closest('.carousel');
+        if (!currentCarousel) return;
+
+        const currentThumbnailOffsetLeft = currentThumbnail.offsetLeft;
+
+        if (event.key === 'ArrowUp') {
+            event.preventDefault();
+            let previousElement = currentCarousel.previousElementSibling;
+            while(previousElement && !previousElement.classList.contains('carousel')) {
+                previousElement = previousElement.previousElementSibling;
+            }
+            targetCarousel = previousElement;
+        } else if (event.key === 'ArrowDown') {
+            event.preventDefault();
+            let nextElement = currentCarousel.nextElementSibling;
+            while(nextElement && !nextElement.classList.contains('carousel')) {
+                nextElement = nextElement.nextElementSibling;
+            }
+            targetCarousel = nextElement;
+        }
+
+        if (targetCarousel) {
+            const closestThumbnail = findClosestThumbnail(targetCarousel, currentThumbnailOffsetLeft);
+            if (closestThumbnail) {
+                closestThumbnail.focus();
+                closestThumbnail.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+            }
+        }
+    });
+
     renderCarousels();
 });
