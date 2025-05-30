@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const thumbnailContainer = document.createElement('div');
         thumbnailContainer.classList.add('thumbnail-container');
 
-        carouselData.videos.forEach(video => {
+        carouselData.videos.forEach(video => { // 'video' object is from this scope
             const thumbnailDiv = document.createElement('div');
             thumbnailDiv.classList.add('thumbnail');
             thumbnailDiv.setAttribute('data-video-id', video.id);
