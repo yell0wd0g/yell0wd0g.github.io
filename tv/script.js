@@ -1,9 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
     const mainContentArea = document.getElementById('content');
-    // let originalCarouselsHTML = ''; // To store the initial state of carousels - Not effectively used with current renderCarousels
-
-    // Data for video carousels
-    // Sourced from: https://www.blender.org/about/projects/
+    // carouselsData definition should be here (taken from previous correct version)
     const carouselsData = [
         {
             title: 'Featured Blender Open Movies',
@@ -31,16 +28,14 @@ document.addEventListener('DOMContentLoaded', function() {
     ];
 
     function playVideo(videoUrl, videoTitle) {
-        mainContentArea.innerHTML = ''; // Clear existing content
+        mainContentArea.innerHTML = ''; 
 
         const videoPlayerContainer = document.createElement('div');
-        videoPlayerContainer.style.padding = '20px'; // Add some padding around the video
-        // videoPlayerContainer.classList.add('video-player-container'); // Optional: for CSS styling
+        videoPlayerContainer.style.padding = '20px'; 
 
         const videoTitleElement = document.createElement('h2');
         videoTitleElement.textContent = videoTitle;
         videoTitleElement.style.marginBottom = '15px';
-        // videoTitleElement.classList.add('video-title-player'); // Optional: for CSS styling
         videoPlayerContainer.appendChild(videoTitleElement);
 
         const videoElement = document.createElement('video');
@@ -49,17 +44,15 @@ document.addEventListener('DOMContentLoaded', function() {
         videoElement.autoplay = true;
         videoElement.style.width = '100%';
         videoElement.style.height = 'auto';
-        videoElement.style.maxHeight = 'calc(100vh - 150px)'; // Ensure video fits viewport reasonably
-        // videoElement.style.borderRadius = '4px'; // Optional
+        videoElement.style.maxHeight = 'calc(100vh - 150px)'; 
         videoPlayerContainer.appendChild(videoElement);
 
         const backButton = document.createElement('button');
         backButton.textContent = '← Back to Home';
-        // backButton.classList.add('back-button'); // Optional: for CSS styling (remove inline styles below if used)
         backButton.style.marginTop = '20px';
         backButton.style.padding = '10px 20px';
         backButton.style.fontSize = '16px';
-        backButton.style.backgroundColor = '#555'; // Default, can be overridden by CSS if class is used
+        backButton.style.backgroundColor = '#555';
         backButton.style.color = '#fff';
         backButton.style.border = 'none';
         backButton.style.borderRadius = '4px';
@@ -68,6 +61,8 @@ document.addEventListener('DOMContentLoaded', function() {
         videoPlayerContainer.appendChild(backButton);
         
         mainContentArea.appendChild(videoPlayerContainer);
+        // Focus the back button for accessibility
+        backButton.focus();
     }
 
     function createCarousel(carouselData) {
@@ -82,14 +77,15 @@ document.addEventListener('DOMContentLoaded', function() {
         const thumbnailContainer = document.createElement('div');
         thumbnailContainer.classList.add('thumbnail-container');
 
-        carouselData.videos.forEach(video => {
+        carouselData.videos.forEach(video => { // 'video' object is from this scope
             const thumbnailDiv = document.createElement('div');
             thumbnailDiv.classList.add('thumbnail');
             thumbnailDiv.setAttribute('data-video-id', video.id);
             thumbnailDiv.setAttribute('data-video-url', video.videoUrl);
             thumbnailDiv.setAttribute('data-video-title', video.title);
+            thumbnailDiv.setAttribute('tabindex', '0'); // Make focusable
 
-            const imgElement = document.createElement('img'); 
+            const imgElement = document.createElement('img');
             imgElement.src = video.thumbnailUrl;
             imgElement.alt = video.title;
 
@@ -100,70 +96,93 @@ document.addEventListener('DOMContentLoaded', function() {
             thumbnailDiv.appendChild(imgElement);
             thumbnailDiv.appendChild(thumbnailTitle);
             
-            // --- START OF HOVER PREVIEW LOGIC ---
-            let previewTimer = null;
+            thumbnailDiv.previewTimer = null; // Store timer ID on the element itself
 
-            thumbnailDiv.addEventListener('mouseenter', () => {
-                if (previewTimer) clearTimeout(previewTimer); // Clear existing timer
+            thumbnailDiv.addEventListener('mouseenter', function() {
+                if (this.previewTimer) clearTimeout(this.previewTimer);
+                const currentThumbnailDiv = this; // Capture 'this' for use in setTimeout
+                this.previewTimer = setTimeout(() => {
+                    const staticImg = currentThumbnailDiv.querySelector('img');
+                    if (staticImg) staticImg.style.display = 'none';
 
-                previewTimer = setTimeout(() => {
-                    const staticImg = thumbnailDiv.querySelector('img');
-                    if (staticImg) {
-                        staticImg.style.display = 'none';
-                    }
-
-                    const oldPreviewVideo = thumbnailDiv.querySelector('.thumbnail-video-preview');
-                    if (oldPreviewVideo) {
-                        oldPreviewVideo.remove();
-                    }
+                    const oldPreviewVideo = currentThumbnailDiv.querySelector('.thumbnail-video-preview');
+                    if (oldPreviewVideo) oldPreviewVideo.remove();
 
                     const previewVideo = document.createElement('video');
-                    previewVideo.src = video.videoUrl; 
+                    previewVideo.src = video.videoUrl; // 'video' from forEach scope is still accessible
                     previewVideo.autoplay = true;
                     previewVideo.loop = true;
-                    previewVideo.muted = true; // Important for autoplay without user interaction
+                    previewVideo.muted = true;
                     previewVideo.classList.add('thumbnail-video-preview');
-                    previewVideo.style.display = 'block'; 
-
-                    thumbnailDiv.insertBefore(previewVideo, thumbnailTitle); 
-                }, 2000); 
+                    previewVideo.style.display = 'block';
+                    currentThumbnailDiv.insertBefore(previewVideo, thumbnailTitle);
+                }, 2000);
             });
 
-            thumbnailDiv.addEventListener('mouseleave', () => {
-                if (previewTimer) {
-                    clearTimeout(previewTimer);
-                    previewTimer = null;
+            thumbnailDiv.addEventListener('mouseleave', function() {
+                if (this.previewTimer) {
+                    clearTimeout(this.previewTimer);
+                    this.previewTimer = null;
                 }
-
-                const previewVideo = thumbnailDiv.querySelector('.thumbnail-video-preview');
-                if (previewVideo) {
-                    previewVideo.remove();
-                }
-
-                const staticImg = thumbnailDiv.querySelector('img');
-                if (staticImg) {
-                    staticImg.style.display = 'block';
-                }
+                const previewVideo = this.querySelector('.thumbnail-video-preview');
+                if (previewVideo) previewVideo.remove();
+                const staticImg = this.querySelector('img');
+                if (staticImg) staticImg.style.display = 'block';
             });
-            // --- END OF HOVER PREVIEW LOGIC ---
 
             thumbnailDiv.addEventListener('click', function() {
-                if (previewTimer) { // Clear hover preview timer if active
-                    clearTimeout(previewTimer);
-                    previewTimer = null;
+                if (this.previewTimer) { // Clear hover timer
+                    clearTimeout(this.previewTimer);
+                    this.previewTimer = null;
                 }
                 const existingPreview = this.querySelector('.thumbnail-video-preview');
-                if (existingPreview) { // Remove preview video if playing
-                    existingPreview.remove();
-                }
+                if (existingPreview) existingPreview.remove();
                 const staticImg = this.querySelector('img');
-                if (staticImg) { // Ensure static image is visible before full playback
-                    staticImg.style.display = 'block';
+                if (staticImg) staticImg.style.display = 'block';
+
+                const videoUrlToPlay = this.getAttribute('data-video-url');
+                const videoTitleToPlay = this.getAttribute('data-video-title');
+                playVideo(videoUrlToPlay, videoTitleToPlay);
+            });
+
+            thumbnailDiv.addEventListener('keydown', function(event) {
+                let targetThumbnail = null;
+                if (event.key === 'ArrowRight') {
+                    event.preventDefault();
+                    targetThumbnail = this.nextElementSibling;
+                    while(targetThumbnail && !targetThumbnail.classList.contains('thumbnail')) {
+                        targetThumbnail = targetThumbnail.nextElementSibling;
+                    }
+                } else if (event.key === 'ArrowLeft') {
+                    event.preventDefault();
+                    targetThumbnail = this.previousElementSibling;
+                    while(targetThumbnail && !targetThumbnail.classList.contains('thumbnail')) {
+                        targetThumbnail = targetThumbnail.previousElementSibling;
+                    }
+                } else if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    // Clean up hover preview state, similar to the click handler
+                    if (this.previewTimer) { 
+                        clearTimeout(this.previewTimer);
+                        this.previewTimer = null;
+                    }
+                    const existingPreview = this.querySelector('.thumbnail-video-preview');
+                    if (existingPreview) existingPreview.remove();
+                    const staticImg = this.querySelector('img');
+                    if (staticImg) staticImg.style.display = 'block';
+
+                    const videoUrlToPlay = this.getAttribute('data-video-url');
+                    const videoTitleToPlay = this.getAttribute('data-video-title');
+                    if (videoUrlToPlay && videoTitleToPlay) { // Ensure attributes are present
+                         playVideo(videoUrlToPlay, videoTitleToPlay);
+                    }
+                    return; 
                 }
 
-                const videoUrl = this.getAttribute('data-video-url');
-                const videoTitle = this.getAttribute('data-video-title');
-                playVideo(videoUrl, videoTitle); 
+                if (targetThumbnail) { 
+                    targetThumbnail.focus();
+                    targetThumbnail.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+                }
             });
 
             thumbnailContainer.appendChild(thumbnailDiv);
@@ -180,7 +199,5 @@ document.addEventListener('DOMContentLoaded', function() {
             mainContentArea.appendChild(carouselElement);
         });
     }
-
-    // Initial rendering of carousels
     renderCarousels();
 });

@@ -107,3 +107,8 @@ header {
 .thumbnail-container::-webkit-scrollbar-track {
     background: #333;
 }
+
+.thumbnail:focus {
+    outline: 3px solid skyblue;
+    outline-offset: 2px; /* Ensures the outline is slightly outside the element, not obscuring its border */
+}
