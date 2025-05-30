@@ -29,15 +29,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function playVideo(videoUrl, videoTitle) {
         mainContentArea.innerHTML = ''; 
-
         const videoPlayerContainer = document.createElement('div');
         videoPlayerContainer.style.padding = '20px'; 
-
         const videoTitleElement = document.createElement('h2');
         videoTitleElement.textContent = videoTitle;
         videoTitleElement.style.marginBottom = '15px';
         videoPlayerContainer.appendChild(videoTitleElement);
-
         const videoElement = document.createElement('video');
         videoElement.src = videoUrl;
         videoElement.controls = true;
@@ -46,7 +43,6 @@ document.addEventListener('DOMContentLoaded', function() {
         videoElement.style.height = 'auto';
         videoElement.style.maxHeight = 'calc(100vh - 150px)'; 
         videoPlayerContainer.appendChild(videoElement);
-
         const backButton = document.createElement('button');
         backButton.textContent = '← Back to Home';
         backButton.style.marginTop = '20px';
@@ -59,63 +55,60 @@ document.addEventListener('DOMContentLoaded', function() {
         backButton.style.cursor = 'pointer';
         backButton.addEventListener('click', renderCarousels);
         videoPlayerContainer.appendChild(backButton);
-        
         mainContentArea.appendChild(videoPlayerContainer);
-        // Focus the back button for accessibility
         backButton.focus();
     }
 
     function createCarousel(carouselData) {
         const carouselDiv = document.createElement('div');
         carouselDiv.classList.add('carousel');
-
         const titleElement = document.createElement('h2');
         titleElement.classList.add('carousel-title');
         titleElement.textContent = carouselData.title;
         carouselDiv.appendChild(titleElement);
-
         const thumbnailContainer = document.createElement('div');
         thumbnailContainer.classList.add('thumbnail-container');
 
-        carouselData.videos.forEach(video => { // 'video' object is from this scope
+        carouselData.videos.forEach(video => {
             const thumbnailDiv = document.createElement('div');
             thumbnailDiv.classList.add('thumbnail');
             thumbnailDiv.setAttribute('data-video-id', video.id);
             thumbnailDiv.setAttribute('data-video-url', video.videoUrl);
             thumbnailDiv.setAttribute('data-video-title', video.title);
-            thumbnailDiv.setAttribute('tabindex', '0'); // Make focusable
+            thumbnailDiv.setAttribute('tabindex', '0');
 
-            const imgElement = document.createElement('img');
-            imgElement.src = video.thumbnailUrl;
-            imgElement.alt = video.title;
+            // Create and append letterDisplay instead of imgElement
+            const letterDisplay = document.createElement('div');
+            letterDisplay.classList.add('thumbnail-letter-display');
+            const firstLetter = video.title.charAt(0).toUpperCase();
+            letterDisplay.textContent = firstLetter;
+            thumbnailDiv.appendChild(letterDisplay); // Append letter display first
 
             const thumbnailTitle = document.createElement('div');
             thumbnailTitle.classList.add('thumbnail-title');
             thumbnailTitle.textContent = video.title;
-
-            thumbnailDiv.appendChild(imgElement);
-            thumbnailDiv.appendChild(thumbnailTitle);
+            thumbnailDiv.appendChild(thumbnailTitle); // Then append title
             
-            thumbnailDiv.previewTimer = null; // Store timer ID on the element itself
+            thumbnailDiv.previewTimer = null;
 
             thumbnailDiv.addEventListener('mouseenter', function() {
                 if (this.previewTimer) clearTimeout(this.previewTimer);
-                const currentThumbnailDiv = this; // Capture 'this' for use in setTimeout
+                const currentThumbnailDiv = this;
                 this.previewTimer = setTimeout(() => {
-                    const staticImg = currentThumbnailDiv.querySelector('img');
-                    if (staticImg) staticImg.style.display = 'none';
+                    const staticDisplay = currentThumbnailDiv.querySelector('.thumbnail-letter-display'); // Changed
+                    if (staticDisplay) staticDisplay.style.display = 'none';
 
                     const oldPreviewVideo = currentThumbnailDiv.querySelector('.thumbnail-video-preview');
                     if (oldPreviewVideo) oldPreviewVideo.remove();
 
                     const previewVideo = document.createElement('video');
-                    previewVideo.src = video.videoUrl; // 'video' from forEach scope is still accessible
+                    previewVideo.src = video.videoUrl;
                     previewVideo.autoplay = true;
                     previewVideo.loop = true;
                     previewVideo.muted = true;
                     previewVideo.classList.add('thumbnail-video-preview');
                     previewVideo.style.display = 'block';
-                    currentThumbnailDiv.insertBefore(previewVideo, thumbnailTitle);
+                    currentThumbnailDiv.insertBefore(previewVideo, thumbnailTitle); 
                 }, 2000);
             });
 
@@ -126,19 +119,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
                 const previewVideo = this.querySelector('.thumbnail-video-preview');
                 if (previewVideo) previewVideo.remove();
-                const staticImg = this.querySelector('img');
-                if (staticImg) staticImg.style.display = 'block';
+                const staticDisplay = this.querySelector('.thumbnail-letter-display'); // Changed
+                if (staticDisplay) staticDisplay.style.display = 'block';
             });
 
             thumbnailDiv.addEventListener('click', function() {
-                if (this.previewTimer) { // Clear hover timer
+                if (this.previewTimer) {
                     clearTimeout(this.previewTimer);
                     this.previewTimer = null;
                 }
                 const existingPreview = this.querySelector('.thumbnail-video-preview');
                 if (existingPreview) existingPreview.remove();
-                const staticImg = this.querySelector('img');
-                if (staticImg) staticImg.style.display = 'block';
+                const staticDisplay = this.querySelector('.thumbnail-letter-display'); // Changed
+                if (staticDisplay) staticDisplay.style.display = 'block';
 
                 const videoUrlToPlay = this.getAttribute('data-video-url');
                 const videoTitleToPlay = this.getAttribute('data-video-title');
@@ -161,33 +154,28 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 } else if (event.key === 'Enter' || event.key === ' ') {
                     event.preventDefault();
-                    // Clean up hover preview state, similar to the click handler
-                    if (this.previewTimer) { 
+                    if (this.previewTimer) {
                         clearTimeout(this.previewTimer);
                         this.previewTimer = null;
                     }
                     const existingPreview = this.querySelector('.thumbnail-video-preview');
                     if (existingPreview) existingPreview.remove();
-                    const staticImg = this.querySelector('img');
-                    if (staticImg) staticImg.style.display = 'block';
+                    const staticDisplay = this.querySelector('.thumbnail-letter-display'); // Changed
+                    if (staticDisplay) staticDisplay.style.display = 'block';
 
                     const videoUrlToPlay = this.getAttribute('data-video-url');
                     const videoTitleToPlay = this.getAttribute('data-video-title');
-                    if (videoUrlToPlay && videoTitleToPlay) { // Ensure attributes are present
-                         playVideo(videoUrlToPlay, videoTitleToPlay);
-                    }
+                    playVideo(videoUrlToPlay, videoTitleToPlay);
                     return; 
                 }
 
-                if (targetThumbnail) { 
+                if (targetThumbnail) {
                     targetThumbnail.focus();
                     targetThumbnail.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
                 }
             });
-
             thumbnailContainer.appendChild(thumbnailDiv);
         });
-
         carouselDiv.appendChild(thumbnailContainer);
         return carouselDiv;
     }
