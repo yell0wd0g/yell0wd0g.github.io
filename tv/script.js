@@ -8,24 +8,24 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             title: 'Featured Blender Open Movies',
             videos: [
-                { id: '1', title: 'Big Buck Bunny', thumbnailUrl: 'https://via.placeholder.com/280x150.png?text=Big+Buck+Bunny', videoUrl: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4' },
-                { id: '2', title: 'Sintel', thumbnailUrl: 'https://via.placeholder.com/280x150.png?text=Sintel', videoUrl: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4' },
-                { id: '3', title: 'Tears of Steel', thumbnailUrl: 'https://via.placeholder.com/280x150.png?text=Tears+of+Steel', videoUrl: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4' },
-                { id: '4', title: 'Elephants Dream', thumbnailUrl: 'https://via.placeholder.com/280x150.png?text=Elephants+Dream', videoUrl: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4' },
-                { id: '5', title: 'Cosmos Laundromat - First Cycle', thumbnailUrl: 'https://via.placeholder.com/280x150.png?text=Cosmos+Laundromat', videoUrl: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/CosmosLaundromat.mp4'},
-                { id: '1', title: 'Big Buck Bunny', thumbnailUrl: 'https://via.placeholder.com/280x150.png?text=Big+Buck+Bunny', videoUrl: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4' },
-                { id: '2', title: 'Sintel', thumbnailUrl: 'https://via.placeholder.com/280x150.png?text=Sintel', videoUrl: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4' }
+                { id: '1', title: 'Big Buck Bunny', thumbnailUrl: 'https://peach.blender.org/wp-content/uploads/title_anouncement.jpg?x54664', videoUrl: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4' },
+                { id: '2', title: 'Sintel', thumbnailUrl: 'https://durian.blender.org/wp-content/uploads/2010/06/05_Sintel_Still07_thumbnail.jpg', videoUrl: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4' },
+                { id: '3', title: 'Tears of Steel', thumbnailUrl: 'https://mango.blender.org/wp-content/uploads/2013/05/01_poster_mango_project.jpg', videoUrl: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4' },
+                { id: '4', title: 'Elephants Dream', thumbnailUrl: 'https://download.blender.org/source/gallery/images/elephants-dream-poster.jpg', videoUrl: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4' },
+                { id: '5', title: 'Cosmos Laundromat - First Cycle', thumbnailUrl: 'https://cosmoslaundromat.org/wp-content/uploads/2015/07/poster-web-resolve1-1280.jpg', videoUrl: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/CosmosLaundromat.mp4'},
+                { id: '1', title: 'Big Buck Bunny', thumbnailUrl: 'https://peach.blender.org/wp-content/uploads/title_anouncement.jpg?x54664', videoUrl: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4' },
+                { id: '2', title: 'Sintel', thumbnailUrl: 'https://durian.blender.org/wp-content/uploads/2010/06/05_Sintel_Still07_thumbnail.jpg', videoUrl: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4' }
             ]
         },
         {
             title: 'Animation & VFX Shorts',
             videos: [
-                { id: '6', title: 'Spring', thumbnailUrl: 'https://via.placeholder.com/280x150.png?text=Spring', videoUrl: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4' },
-                { id: '7', title: 'Coffee Run', thumbnailUrl: 'https://via.placeholder.com/280x150.png?text=Coffee+Run', videoUrl: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4' },
-                { id: '8', title: 'Agent 327: Operation Barbershop', thumbnailUrl: 'https://via.placeholder.com/280x150.png?text=Agent+327', videoUrl: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4' },
-                { id: '9', title: 'Caminandes: Llamigos', thumbnailUrl: 'https://via.placeholder.com/280x150.png?text=Caminandes', videoUrl: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4' },
-                { id: '6', title: 'Spring', thumbnailUrl: 'https://via.placeholder.com/280x150.png?text=Spring', videoUrl: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4' },
-                { id: '7', title: 'Coffee Run', thumbnailUrl: 'https://via.placeholder.com/280x150.png?text=Coffee+Run', videoUrl: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4' }
+                { id: '6', title: 'Spring', thumbnailUrl: 'https://studio.blender.org/wp-content/uploads/2019/03/spring_cover-1200x675.jpg', videoUrl: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4' },
+                { id: '7', title: 'Coffee Run', thumbnailUrl: 'https://studio.blender.org/wp-content/uploads/2020/05/coffee-run-splash-1280x720.jpg', videoUrl: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4' },
+                { id: '8', title: 'Agent 327: Operation Barbershop', thumbnailUrl: 'https://studio.blender.org/wp-content/uploads/2017/05/agent_header_01_operation_barbershop-1280x533.jpg', videoUrl: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4' },
+                { id: '9', title: 'Caminandes: Llamigos', thumbnailUrl: 'https://studio.blender.org/wp-content/uploads/2016/03/caminandes-llamigos-splash-1200x675.jpg', videoUrl: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4' },
+                { id: '6', title: 'Spring', thumbnailUrl: 'https://studio.blender.org/wp-content/uploads/2019/03/spring_cover-1200x675.jpg', videoUrl: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4' },
+                { id: '7', title: 'Coffee Run', thumbnailUrl: 'https://studio.blender.org/wp-content/uploads/2020/05/coffee-run-splash-1280x720.jpg', videoUrl: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4' }
             ]
         }
     ];
