@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YTTV Splash test 2</title>
+</head>
+<body>
+
+  <video autoplay="" style="height: 450px;width: 800px;" id="video" muted></video>
+
+<script>// Get a reference to your HTML video element
+const myVideoElement = document.getElementById('video');
+
+// The URL of the video file you want to load
+const videoUrl = 'https://www.youtube.com/s/ytvlr/splash_screen/splash_crf50.webm';
+
+// Check if Media Source Extensions are supported by the browser
+if ('MediaSource' in window && MediaSource.isTypeSupported('video/webm; codecs="vp9"')) {
+  const mediaSource = new MediaSource();
+
+  // Create an object URL from the MediaSource and assign it to the video element's src
+  myVideoElement.src = URL.createObjectURL(mediaSource);
+
+  // Event listener for when the MediaSource is ready
+  mediaSource.addEventListener('sourceopen', () => {
+    console.log('############ MediaSource opened');
+    // Remove the object URL to free up resources once it's no longer needed
+    // URL.revokeObjectURL(myVideoElement.src);
+
+    try {
+      // Add a SourceBuffer with the appropriate MIME type
+      const sourceBuffer = mediaSource.addSourceBuffer('video/webm; codecs="vp9"');
+
+      // Fetch the video data from the URL
+      fetch(videoUrl)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          return response.arrayBuffer();
+        })
+        .then(videoData => {
+          console.log('############ Video data fetched, appending to buffer...');
+          // Event listener for when the buffer update is complete
+          sourceBuffer.addEventListener('updateend', () => {
+            console.log('############ Buffer update ended.');
+            if (!sourceBuffer.updating && mediaSource.readyState === 'open') {
+              // Signal that we have no more data to append
+              mediaSource.endOfStream();
+              console.log('############ End of stream signaled.');
+              // Optionally, start playing the video
+              // myVideoElement.play();
+            }
+          });
+
+          // Append the fetched video data to the SourceBuffer
+          sourceBuffer.appendBuffer(videoData);
+        })
+        .catch(error => {
+          console.error('############ Error fetching or appending video data:', error);
+          if (mediaSource.readyState === 'open') {
+             mediaSource.endOfStream('network');
+          }
+        });
+    } catch (e) {
+      console.error('############ Exception adding SourceBuffer:', e);
+    }
+  });
+
+  mediaSource.addEventListener('sourceended', () => {
+    console.log('############ MediaSource ended');
+  });
+
+  mediaSource.addEventListener('sourceclose', () => {
+    console.log('############ MediaSource closed');
+  });
+
+} else {
+  console.error('Media Source Extensions are not supported in this browser.');
+  // Fallback: Set the src directly if MSE is not supported
+  // myVideoElement.src = videoUrl;
+}
+</script>
+</body>
+</html>
