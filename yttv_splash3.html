@@ -30,7 +30,7 @@ const mediaSource = new MediaSource();
 myVideoElement.src = URL.createObjectURL(mediaSource);
 await awaitSourceOpen(mediaSource);
 
-sourceBuffer = mediaSource.addSourceBuffer('video/webm; codecs="vp9"');
+const sourceBuffer = mediaSource.addSourceBuffer('video/webm; codecs="vp9"');
 
 const response = await fetch(videoUrl);
 const videoData = await response.arrayBuffer();
