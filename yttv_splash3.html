@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YTTV Splash test 2</title>
+</head>
+<body>
+
+  <video autoplay="" style="height: 450px;width: 800px;" id="video" muted></video>
+
+<script type="module">
+const videoUrl = 'https://upload.wikimedia.org/wikipedia/commons/2/25/Sintel_webm_extract.webm';
+// Get a reference to your HTML video element
+const myVideoElement = document.getElementById('video');
+
+function awaitSourceOpen(mediaSource) {
+  return new Promise((resolve, reject) => {
+    if (mediaSource.readyState === 'open') {
+      resolve();
+      return;
+    }
+    mediaSource.addEventListener('sourceopen', resolve, { once: true });
+    mediaSource.addEventListener('error', reject, { once: true });
+  });
+}
+
+
+const mediaSource = new MediaSource();
+myVideoElement.src = URL.createObjectURL(mediaSource);
+await awaitSourceOpen(mediaSource);
+
+sourceBuffer = mediaSource.addSourceBuffer('video/webm; codecs="vp9"');
+
+const response = await fetch(videoUrl);
+const videoData = await response.arrayBuffer();
+
+sourceBuffer.appendBuffer(videoData);
+videoElement.play();
+
+</script>
+</body>
+</html>
