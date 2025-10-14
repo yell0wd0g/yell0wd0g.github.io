@@ -7,12 +7,17 @@
 </head>
 <body>
 
-  <video autoplay="" style="height: 450px;width: 800px;" id="video" muted></video>
+  <video style="height: 450px;width: 800px;" id="video" muted></video>
 
 <script type="module">
 const videoUrl = 'https://upload.wikimedia.org/wikipedia/commons/2/25/Sintel_webm_extract.webm';
-// Get a reference to your HTML video element
-const myVideoElement = document.getElementById('video');
+const videoElement = document.getElementById('video');
+
+// Check if the video element exists
+if (!videoElement) {
+  console.error('Error: Could not find HTML element with id="video"');
+  // You might want to stop execution here
+}
 
 function awaitSourceOpen(mediaSource) {
   return new Promise((resolve, reject) => {
@@ -20,24 +25,75 @@ function awaitSourceOpen(mediaSource) {
       resolve();
       return;
     }
+    // Use an error handler for the MediaSource object
+    const errorHandler = () => {
+        mediaSource.removeEventListener('sourceopen', resolve);
+        reject(new Error('MediaSource failed to open or encountered an error.'));
+    };
+    
     mediaSource.addEventListener('sourceopen', resolve, { once: true });
-    mediaSource.addEventListener('error', reject, { once: true });
+    mediaSource.addEventListener('error', errorHandler, { once: true });
   });
 }
 
+// ⬇️ Wrap the core logic in an async function ⬇️
+async function loadMediaSourceVideo() {
+  const mediaSource = new MediaSource();
+  videoElement.src = URL.createObjectURL(mediaSource);
 
-const mediaSource = new MediaSource();
-myVideoElement.src = URL.createObjectURL(mediaSource);
-await awaitSourceOpen(mediaSource);
+  try {
+    // 1. Await the MediaSource to open before proceeding
+    await awaitSourceOpen(mediaSource);
+    console.log('MediaSource is open.');
 
-const sourceBuffer = mediaSource.addSourceBuffer('video/webm; codecs="vp8"');
+    // 2. Add the source buffer (use the correct MIME type for the video)
+    // NOTE: 'video/webm; codecs="vp8"' is correct for the Sintel WebM file.
+    const mimeType = 'video/webm; codecs="vp8"';
+    if (!MediaSource.isTypeSupported(mimeType)) {
+        console.error(`MIME type not supported: ${mimeType}`);
+        return;
+    }
+    const sourceBuffer = mediaSource.addSourceBuffer(mimeType);
 
-const response = await fetch(videoUrl);
-const videoData = await response.arrayBuffer();
+    // 3. Fetch the video data
+    console.log('Fetching video data...');
+    const response = await fetch(videoUrl);
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const videoData = await response.arrayBuffer();
+    console.log('Video data fetched. Size:', videoData.byteLength);
 
-sourceBuffer.appendBuffer(videoData);
-myVideoElement.play();
+    // 4. Append the data to the buffer
+    // You need to await the 'updateend' event to ensure the buffer is ready for more data
+    // (though for a single append, it's often not strictly necessary, it's best practice)
+    sourceBuffer.appendBuffer(videoData);
+
+    await new Promise(resolve => {
+        // Wait for the append operation to finish
+        sourceBuffer.addEventListener('updateend', resolve, { once: true });
+    });
+
+    // 5. Signal that the stream is complete
+    mediaSource.endOfStream();
+    console.log('End of stream signaled.');
+
+    // 6. Play the video
+    await videoElement.play();
+    console.log('Video is playing.');
+
+  } catch (error) {
+    console.error('An error occurred during video loading:', error);
+    // Revoke the object URL on error
+    URL.revokeObjectURL(videoElement.src);
+  }
+}
+
+// ⬇️ Call the async function to start the process ⬇️
+loadMediaSourceVideo();
 
 </script>
+
+    
 </body>
 </html>
