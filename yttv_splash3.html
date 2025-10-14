@@ -36,7 +36,7 @@ const response = await fetch(videoUrl);
 const videoData = await response.arrayBuffer();
 
 sourceBuffer.appendBuffer(videoData);
-videoElement.play();
+myVideoElement.play();
 
 </script>
 </body>
