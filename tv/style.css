@@ -51,8 +51,9 @@ header {
     border-radius: 4px;
     overflow: hidden;
     cursor: pointer;
-    width: 280px; /* Fixed width for thumbnails */
-    flex-shrink: 0; /* Prevent thumbnails from shrinking */
+    /* Show six thumbnails across the available carousel width. */
+    width: calc((100% - 75px) / 6);
+    flex: 0 0 calc((100% - 75px) / 6);
     transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out; /* Added transition */
     position: relative; /* Added for video preview positioning */
     /* Height will be determined by aspect-ratio content or explicit height for letter display */
@@ -134,4 +135,27 @@ header {
 .thumbnail:focus {
     outline: 3px solid skyblue;
     outline-offset: 2px; /* Ensures the outline is slightly outside the element, not obscuring its border */
+}
+
+/* Keep thumbnails usable on narrower screens while retaining the carousel. */
+@media (max-width: 900px) {
+    .thumbnail {
+        width: calc((100% - 45px) / 4);
+        flex-basis: calc((100% - 45px) / 4);
+    }
+}
+
+@media (max-width: 600px) {
+    #content {
+        padding: 20px;
+    }
+
+    header {
+        padding: 20px;
+    }
+
+    .thumbnail {
+        width: calc((100% - 15px) / 2);
+        flex-basis: calc((100% - 15px) / 2);
+    }
 }
